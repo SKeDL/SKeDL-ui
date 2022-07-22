@@ -31,7 +31,7 @@
   },
   "plugins": ["react", "react-hooks", "@typescript-eslint"],
   "rules": {
-    "no-console": "error",
+    "no-console": "warn",
     "indent": ["error", 2],
     "linebreak-style": ["error", "unix"],
     "quotes": ["error", "single"],
@@ -47,7 +47,8 @@
       "warn",
       {
         "selector": "default",
-        "format": ["camelCase", "PascalCase", "UPPER_CASE"]
+        "format": ["camelCase", "PascalCase", "UPPER_CASE"],
+        "leadingUnderscore": "allow"
       }
     ],
     "@typescript-eslint/no-non-null-assertion": "off"
