@@ -1,4 +1,4 @@
-import { TokenInfo } from './../../types/Auth';
+import { Session } from './../../types/Auth';
 import { BaseQueryApi } from '@reduxjs/toolkit/dist/query/baseQueryTypes';
 import { logOut, setCredentials } from '../auth/AuthSlice';
 
@@ -43,23 +43,23 @@ const baseQueryWithReAuth = async (
       extraOptions
     );
 
-    const tokenData = refreshResult?.data as TokenInfo;
+    const session = refreshResult?.data as Session;
     if (
-      tokenData?.RefreshToken &&
-      tokenData?.AccessToken &&
-      tokenData?.ExpireAt
+      session?.loginData?.refreshToken &&
+      session?.loginData?.accessToken &&
+      session?.loginData?.expireAt
     ) {
       api.dispatch(
         setCredentials({
-          jwtToken: tokenData.AccessToken,
-          refreshToken: tokenData.RefreshToken,
-          expireAt: Number(tokenData.ExpireAt),
+          jwtToken: session?.loginData?.accessToken,
+          refreshToken: session?.loginData?.refreshToken,
+          expireAt: Number(session?.loginData?.expireAt),
         })
       );
       result = await baseQuery(args, api, extraOptions);
-      localStorage.setItem('AccessToken', tokenData.AccessToken);
-      localStorage.setItem('RefreshToken', tokenData.RefreshToken);
-      localStorage.setItem('ExpireAt', tokenData.ExpireAt);
+      localStorage.setItem('AccessToken', session?.loginData?.accessToken);
+      localStorage.setItem('RefreshToken', session?.loginData?.refreshToken);
+      localStorage.setItem('ExpireAt', `${session?.loginData?.expireAt}`);
     } else {
       api.dispatch(logOut());
     }

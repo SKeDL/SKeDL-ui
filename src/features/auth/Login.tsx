@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
-// import { useNavigate } from 'react-router-dom';
 import { useAppDispatch } from '../../app/hooks';
 import { useLoginMutation } from './AuthApi';
-import { setCredentials } from './AuthSlice';
-// import { setCredentials } from './AuthSlice';
+import { logOut, setCredentials } from './AuthSlice';
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import style from './auth.module.sass';
 
 export const Login = () => {
   const appDispatch = useAppDispatch();
-  // const navigate = useNavigate();
 
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -17,62 +17,67 @@ export const Login = () => {
   const handleLoginButton = () => {
     void login({ username, password })
       .unwrap()
-      .then((tokenData) => {
+      .then((response) => {
+        console.log('response', response);
         appDispatch(
           setCredentials({
-            jwtToken: tokenData.AccessToken,
-            refreshToken: tokenData.RefreshToken,
-            expireAt: Number(tokenData.ExpireAt),
-            isLoggedIn: !!tokenData.AccessToken && !!tokenData.RefreshToken,
+            jwtToken: response.loginData?.accessToken,
+            refreshToken: response.loginData?.refreshToken,
+            expireAt: response.loginData?.expireAt,
+            isLoggedIn:
+              !!response.loginData?.accessToken &&
+              !!response.loginData?.refreshToken,
           })
         );
       })
-      .catch((reason) => {
-        console.log(reason);
+      .catch(() => {
+        console.log('error!!!');
+        appDispatch(logOut);
       });
   };
   return (
-    <>
-      <div className="form-outline mb-4">
-        <input
-          type="text"
-          id="username"
-          className="form-control"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          autoFocus
-        />
-        <label className="form-label" htmlFor="username">
-          Username
-        </label>
-      </div>
+    <main className={`${style.form_auth} w-100 m-auto text-center`}>
+      <form>
+        <h1 className="h3 mb-3 fw-normal">Please sign in</h1>
 
-      <div className="form-outline mb-4">
-        <input
-          type="password"
-          id="password"
-          className="form-control"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        <label className="form-label" htmlFor="password">
-          Password
-        </label>
-      </div>
+        <div className={`form-floating ${style.form_signin}`}>
+          <input
+            type="text"
+            className="form-control"
+            id="username"
+            placeholder="name@example.com"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            autoFocus
+          />
+          <label htmlFor="username">Email address</label>
+        </div>
+        <div className={`form-floating ${style.form_signin}`}>
+          <input
+            type="password"
+            className="form-control"
+            id="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          <label htmlFor="password">Password</label>
+        </div>
 
-      <button
-        type="button"
-        className="btn btn-primary btn-block mb-4"
-        onClick={handleLoginButton}
-      >
-        Sign in
-      </button>
-
-      <div className="text-center">
-        <p>
-          Not a member? <a href="#!">Register</a>
-        </p>
-      </div>
-    </>
+        <div className="checkbox mb-3">
+          <label>
+            <input type="checkbox" value="remember-me" /> Remember me
+          </label>
+        </div>
+        <button
+          className="w-100 btn btn-lg btn-primary"
+          type="button"
+          onClick={handleLoginButton}
+        >
+          Sign in
+        </button>
+        <p className="mt-5 mb-3 text-muted">© 2017–2022</p>
+      </form>
+    </main>
   );
 };

@@ -23,6 +23,7 @@ const AuthSlice = createSlice({
   initialState,
   reducers: {
     setCredentials: (state, action: PayloadAction<AuthState>) => {
+      console.log('payload', action.payload);
       state.jwtToken = action.payload.jwtToken;
       state.refreshToken = action.payload.refreshToken;
       state.expireAt = action.payload.expireAt;

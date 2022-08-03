@@ -1,12 +1,14 @@
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 import { Login } from './features/auth/Login';
-
 import { Dashboard } from './components/Dashboard';
 import { Home } from './components/Home';
 import { Layout } from './components/Layout';
 import { PrivateRoute } from './features/auth/PrivateRoute';
 import { UnsignedRoute } from './features/auth/UnsignedRoute';
+
+// import 'bootstrap/dist/css/bootstrap.min.css';
+import './index.sass';
 
 export const App = () => {
   return (

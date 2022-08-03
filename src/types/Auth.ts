@@ -4,7 +4,14 @@ export type UserCredentials = {
 };
 
 export type TokenInfo = {
-  AccessToken?: string;
-  RefreshToken?: string;
-  ExpireAt?: string;
+  accessToken?: string;
+  refreshToken?: string;
+  expireAt?: number;
+};
+
+export type Session = {
+  id: string;
+  ip?: string;
+  loggedOut?: boolean;
+  loginData: TokenInfo;
 };
